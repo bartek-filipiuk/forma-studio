@@ -1,0 +1,216 @@
+{
+  "$defs": {
+    "Part": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,64}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "template": {
+          "enum": [
+            "enclosure",
+            "head",
+            "plate",
+            "box",
+            "cylinder",
+            "cores3",
+            "sg90",
+            "pca9685",
+            "mesh"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "role": {
+          "default": "print",
+          "enum": [
+            "print",
+            "reference"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "color": {
+          "default": "#dddcd4",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "title": "Color",
+          "type": "string"
+        },
+        "visible": {
+          "default": true,
+          "title": "Visible",
+          "type": "boolean"
+        },
+        "params": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Params",
+          "type": "object"
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        },
+        "asset_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9_-]{1,64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "fit_to": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9_-]{1,64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fit To"
+        },
+        "clearance": {
+          "default": 0.4,
+          "maximum": 20,
+          "minimum": 0,
+          "title": "Clearance",
+          "type": "number"
+        },
+        "group": {
+          "default": "free",
+          "enum": [
+            "base",
+            "neck",
+            "head",
+            "free"
+          ],
+          "title": "Group",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "template"
+      ],
+      "title": "Part",
+      "type": "object"
+    },
+    "Transform": {
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "default": [
+            0,
+            0,
+            0
+          ],
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Position",
+          "type": "array"
+        },
+        "rotation": {
+          "default": [
+            0,
+            0,
+            0
+          ],
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Rotation",
+          "type": "array"
+        },
+        "scale": {
+          "default": 1,
+          "maximum": 1000,
+          "minimum": 0.001,
+          "title": "Scale",
+          "type": "number"
+        }
+      },
+      "title": "Transform",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "default": "M\u00f3j projekt",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "units": {
+      "const": "mm",
+      "default": "mm",
+      "title": "Units",
+      "type": "string"
+    },
+    "revision": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "parts": {
+      "items": {
+        "$ref": "#/$defs/Part"
+      },
+      "maxItems": 200,
+      "title": "Parts",
+      "type": "array"
+    }
+  },
+  "title": "Project",
+  "type": "object"
+}

@@ -1,0 +1,5 @@
+# Local only: `docker compose` loads this automatically. Coolify deploys
+# compose.yaml alone and routes the domain to web:80 through its proxy.
+services:
+  web:
+    ports: ['127.0.0.1:${FORMA_WEB_PORT:-8080}:80']

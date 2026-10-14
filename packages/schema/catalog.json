@@ -1,0 +1,10 @@
+[
+ {"id":"enclosure","name":"Obudowa otwarta","category":"Konstrukcja","description":"Parametryczna skorupa z dnem i zaokrąglonymi narożnikami.","role":"print","color":"#dddcd4","params":{"width":80,"depth":60,"height":35,"wall":2.4,"radius":8}},
+ {"id":"head","name":"Głowa z oknem","category":"Konstrukcja","description":"Obudowa otwarta z tyłu, z oknem na ekran z przodu.","role":"print","color":"#dddcd4","params":{"width":82,"depth":38,"height":82,"wall":2.4,"radius":12,"windowWidth":59,"windowHeight":59}},
+ {"id":"plate","name":"Płytka / pokrywa","category":"Konstrukcja","description":"Płytka z czterema otworami przelotowymi. Rozstaw wymaga dopasowania.","role":"print","color":"#9ca9a1","params":{"width":110,"depth":92,"height":3,"radius":12,"holeDiameter":3.2,"holeInset":14}},
+ {"id":"box","name":"Bryła prostokątna","category":"Bryły","description":"Pełna bryła z zaokrąglonym obrysem.","role":"print","color":"#e7a86b","params":{"width":30,"depth":30,"height":30,"radius":3}},
+ {"id":"cylinder","name":"Cylinder / dystans","category":"Bryły","description":"Cylinder, opcjonalnie z osiowym otworem.","role":"print","color":"#839787","params":{"diameter":24,"height":16,"holeDiameter":5}},
+ {"id":"cores3","name":"M5Stack CoreS3","category":"Elektronika","description":"Orientacyjny obrys modułu bez DinBase. Zmierz własny egzemplarz i złącza.","role":"reference","color":"#242e32","params":{"width":54,"depth":20,"height":54}},
+ {"id":"sg90","name":"Mikroserwo SG90","category":"Elektronika","description":"Orientacyjny korpus. Uszka, wał i orczyk nie są obrysem montażowym.","role":"reference","color":"#4474a5","params":{"width":23,"depth":12.2,"height":29}},
+ {"id":"pca9685","name":"Sterownik PCA9685","category":"Elektronika","description":"Obrys 60 × 40 × 18 mm według instrukcji PICO; złącza wymagają przymiarki.","role":"reference","color":"#477d67","params":{"width":60,"depth":40,"height":18}}
+]

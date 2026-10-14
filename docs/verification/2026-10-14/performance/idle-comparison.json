@@ -1,0 +1,16 @@
+{
+  "environment": "Chromium software WebGL, production preview, default seven-part PICO, 1440x900",
+  "settle_ms": 10000,
+  "requested_sample_ms": 3000,
+  "before": {
+    "draw_calls": 806,
+    "task_ms": 3446.526,
+    "entry_js_bytes": 1310455
+  },
+  "after": {
+    "draw_calls": 0,
+    "task_ms": 2.154,
+    "entry_js_bytes": 1267614
+  },
+  "limitations": "Single local sample; actual baseline interval was not recorded and can exceed requested duration under load. Not a CPU percentage, FPS, battery or Core Web Vitals benchmark."
+}

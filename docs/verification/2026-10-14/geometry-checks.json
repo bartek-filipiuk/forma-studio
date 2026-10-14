@@ -1,0 +1,58 @@
+{
+  "base": [
+    {
+      "name": "Korpus podstawy",
+      "bounds_mm": [
+        110.0,
+        92.0,
+        52.0
+      ],
+      "volume_mm3": 97455.03888873776,
+      "triangles": 892
+    }
+  ],
+  "plate": [
+    {
+      "name": "Korpus podstawy",
+      "bounds_mm": [
+        110.0,
+        92.0,
+        52.0
+      ],
+      "volume_mm3": 97455.03888873776,
+      "triangles": 892
+    },
+    {
+      "name": "Pokrywa podstawy",
+      "bounds_mm": [
+        110.0,
+        92.0,
+        3.0
+      ],
+      "volume_mm3": 29891.950412671184,
+      "triangles": 2140
+    },
+    {
+      "name": "Szyja · szkic",
+      "bounds_mm": [
+        26.993958,
+        26.996978000000013,
+        22.0
+      ],
+      "volume_mm3": 11483.519012425671,
+      "triangles": 840
+    },
+    {
+      "name": "Głowa z oknem",
+      "bounds_mm": [
+        82.0,
+        38.0,
+        82.0
+      ],
+      "volume_mm3": 33135.58460538245,
+      "triangles": 1344
+    }
+  ],
+  "native_volume_mm3": 97463.62370756091,
+  "sliced": false
+}

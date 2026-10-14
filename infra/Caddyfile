@@ -1,0 +1,37 @@
+{
+    servers {
+        # Coolify's Traefik sits in front on a private Docker network. Strict mode
+        # reads X-Forwarded-For right to left, so a client cannot spoof its IP.
+        trusted_proxies static private_ranges
+        trusted_proxies_strict
+    }
+}
+
+:80 {
+    encode gzip zstd
+    handle /api/* {
+        request_body {
+            max_size 42MB
+        }
+        reverse_proxy api:8000 {
+            header_up X-Real-IP {client_ip}
+        }
+    }
+    handle /assets/* {
+        root * /srv
+        header Cache-Control "public, max-age=31536000, immutable"
+        file_server
+    }
+    handle {
+        header Cache-Control "no-cache"
+        root * /srv
+        try_files {path} /index.html
+        file_server
+    }
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        X-Frame-Options DENY
+        Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+    }
+}

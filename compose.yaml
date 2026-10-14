@@ -1,0 +1,97 @@
+name: forma-studio
+x-api: &api
+  build:
+    context: .
+    dockerfile: infra/api.Dockerfile
+  # Explicit pass-through instead of env_file: Coolify injects these values,
+  # locally Compose reads them from .env. Defaults keep existing local volumes.
+  environment: &env
+    FORMA_DATABASE_URL: postgresql+psycopg://forma:${FORMA_DB_PASSWORD:-forma-local}@postgres:5432/forma
+    FORMA_REDIS_URL: redis://redis:6379/0
+    FORMA_QUEUE: celery
+    FORMA_STORAGE: s3
+    FORMA_DATA_DIR: /app/data
+    FORMA_S3_ENDPOINT: http://minio:9000
+    FORMA_S3_ACCESS_KEY: forma-local
+    FORMA_S3_SECRET_KEY: ${FORMA_S3_SECRET:-forma-local-development}
+    FORMA_S3_BUCKET: forma
+    FORMA_OPENAI_API_KEY: ${FORMA_OPENAI_API_KEY:-}
+    FORMA_OPENAI_MODEL: ${FORMA_OPENAI_MODEL:-}
+    FORMA_MESHY_API_KEY: ${FORMA_MESHY_API_KEY:-}
+    FORMA_MESHY_MODEL: ${FORMA_MESHY_MODEL:-meshy-7.1}
+    FORMA_PUBLIC_URL: ${FORMA_PUBLIC_URL:-}
+    FORMA_AUTH_COOKIE_SECURE: ${FORMA_AUTH_COOKIE_SECURE:-false}
+    FORMA_SESSION_HOURS: ${FORMA_SESSION_HOURS:-12}
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: forma
+      POSTGRES_USER: forma
+      POSTGRES_PASSWORD: ${FORMA_DB_PASSWORD:-forma-local}
+    volumes: [postgres:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U forma -d forma"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  redis:
+    image: redis:7.4-alpine
+    command: [redis-server, --appendonly, 'yes']
+    volumes: [redis:/data]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  minio:
+    image: ${FORMA_MINIO_IMAGE:-minio/minio:RELEASE.2025-04-22T22-12-26Z}
+    command: [server, /data]
+    environment:
+      MINIO_ROOT_USER: forma-local
+      MINIO_ROOT_PASSWORD: ${FORMA_S3_SECRET:-forma-local-development}
+    volumes: [assets:/data]
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:9000/minio/health/live]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    <<: *api
+    restart: 'no'
+    depends_on:
+      postgres: {condition: service_healthy}
+      minio: {condition: service_healthy}
+    command: [sh, -c, 'alembic upgrade head && python -m forma.init_storage']
+  api:
+    <<: *api
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/ready')"]
+      interval: 10s
+      timeout: 3s
+      retries: 20
+  worker:
+    <<: *api
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    command: [celery, -A, forma.jobs:celery, worker, --loglevel=INFO, --concurrency=1]
+  web:
+    build:
+      context: .
+      dockerfile: infra/web.Dockerfile
+    depends_on:
+      api: {condition: service_healthy}
+    restart: unless-stopped
+volumes:
+  postgres:
+  redis:
+  assets:

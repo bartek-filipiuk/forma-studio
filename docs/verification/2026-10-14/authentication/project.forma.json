@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "id": "30e0afee-9ad5-475a-a4f8-809042feb50c",
+  "name": "Acceptance 1792011422604",
+  "units": "mm",
+  "revision": 3,
+  "parts": [
+    {
+      "id": "pico-base",
+      "name": "Korpus podstawy",
+      "template": "enclosure",
+      "role": "print",
+      "color": "#dddcd4",
+      "visible": true,
+      "params": {
+        "width": 110,
+        "depth": 92,
+        "height": 52,
+        "wall": 3.5,
+        "radius": 14
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "base"
+    },
+    {
+      "id": "pico-deck",
+      "name": "Pokrywa podstawy",
+      "template": "plate",
+      "role": "print",
+      "color": "#9ca9a1",
+      "visible": true,
+      "params": {
+        "width": 110,
+        "depth": 92,
+        "height": 3,
+        "radius": 12,
+        "holeDiameter": 3.2,
+        "holeInset": 14
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          53
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "base"
+    },
+    {
+      "id": "pico-neck",
+      "name": "Szyja · szkic",
+      "template": "cylinder",
+      "role": "print",
+      "color": "#839787",
+      "visible": true,
+      "params": {
+        "diameter": 27,
+        "height": 22,
+        "holeDiameter": 8
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          57
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "neck"
+    },
+    {
+      "id": "pico-head",
+      "name": "Głowa z oknem",
+      "template": "head",
+      "role": "print",
+      "color": "#dddcd4",
+      "visible": true,
+      "params": {
+        "width": 82,
+        "depth": 38,
+        "height": 82,
+        "wall": 2.4,
+        "radius": 12,
+        "windowWidth": 59,
+        "windowHeight": 59
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          81
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "head"
+    },
+    {
+      "id": "pico-screen",
+      "name": "M5Stack CoreS3",
+      "template": "cores3",
+      "role": "reference",
+      "color": "#242e32",
+      "visible": true,
+      "params": {
+        "width": 54,
+        "depth": 20,
+        "height": 54
+      },
+      "transform": {
+        "position": [
+          0,
+          -6,
+          95
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "head"
+    },
+    {
+      "id": "pico-board",
+      "name": "Sterownik PCA9685",
+      "template": "pca9685",
+      "role": "reference",
+      "color": "#477d67",
+      "visible": true,
+      "params": {
+        "width": 60,
+        "depth": 40,
+        "height": 18
+      },
+      "transform": {
+        "position": [
+          0,
+          9,
+          5
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "base"
+    },
+    {
+      "id": "pico-servo",
+      "name": "Mikroserwo SG90",
+      "template": "sg90",
+      "role": "reference",
+      "color": "#4474a5",
+      "visible": true,
+      "params": {
+        "width": 23,
+        "depth": 12.2,
+        "height": 29
+      },
+      "transform": {
+        "position": [
+          0,
+          -18,
+          24
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1
+      },
+      "asset_id": null,
+      "fit_to": null,
+      "clearance": 0.4,
+      "group": "base"
+    }
+  ]
+}
