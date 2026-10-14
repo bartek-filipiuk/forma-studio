@@ -1,5 +1,34 @@
 # Local only: `docker compose` loads this automatically. Coolify deploys
-# compose.yaml alone and routes the domain to web:80 through its proxy.
+# compose.yaml alone: no host port (its proxy routes the domain to web:80) and
+# disk storage instead of MinIO. Locally the existing MinIO `assets` volume stays.
 services:
   web:
     ports: ['127.0.0.1:${FORMA_WEB_PORT:-8080}:80']
+  minio:
+    image: ${FORMA_MINIO_IMAGE:-minio/minio:RELEASE.2025-04-22T22-12-26Z}
+    command: [server, /data]
+    environment:
+      MINIO_ROOT_USER: forma-local
+      MINIO_ROOT_PASSWORD: ${FORMA_S3_SECRET:-forma-local-development}
+    volumes: [assets:/data]
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:9000/minio/health/live]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    depends_on:
+      minio: {condition: service_healthy}
+    environment: &s3
+      FORMA_STORAGE: s3
+      FORMA_S3_ENDPOINT: http://minio:9000
+      FORMA_S3_ACCESS_KEY: forma-local
+      FORMA_S3_SECRET_KEY: ${FORMA_S3_SECRET:-forma-local-development}
+      FORMA_S3_BUCKET: forma
+  api:
+    environment: *s3
+  worker:
+    environment: *s3
+volumes:
+  assets:

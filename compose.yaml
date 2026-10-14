@@ -9,12 +9,10 @@ x-api: &api
     FORMA_DATABASE_URL: postgresql+psycopg://forma:${FORMA_DB_PASSWORD:-forma-local}@postgres:5432/forma
     FORMA_REDIS_URL: redis://redis:6379/0
     FORMA_QUEUE: celery
-    FORMA_STORAGE: s3
+    # ponytail: production keeps files on the shared `files` volume because the
+    # MinIO image is no longer pullable. compose.override.yaml restores S3 locally.
+    FORMA_STORAGE: local
     FORMA_DATA_DIR: /app/data
-    FORMA_S3_ENDPOINT: http://minio:9000
-    FORMA_S3_ACCESS_KEY: forma-local
-    FORMA_S3_SECRET_KEY: ${FORMA_S3_SECRET:-forma-local-development}
-    FORMA_S3_BUCKET: forma
     FORMA_OPENAI_API_KEY: ${FORMA_OPENAI_API_KEY:-}
     FORMA_OPENAI_MODEL: ${FORMA_OPENAI_MODEL:-}
     FORMA_MESHY_API_KEY: ${FORMA_MESHY_API_KEY:-}
@@ -22,6 +20,7 @@ x-api: &api
     FORMA_PUBLIC_URL: ${FORMA_PUBLIC_URL:-}
     FORMA_AUTH_COOKIE_SECURE: ${FORMA_AUTH_COOKIE_SECURE:-false}
     FORMA_SESSION_HOURS: ${FORMA_SESSION_HOURS:-12}
+  volumes: [files:/app/data]
   restart: unless-stopped
 
 services:
@@ -48,25 +47,11 @@ services:
       timeout: 3s
       retries: 20
     restart: unless-stopped
-  minio:
-    image: ${FORMA_MINIO_IMAGE:-minio/minio:RELEASE.2025-04-22T22-12-26Z}
-    command: [server, /data]
-    environment:
-      MINIO_ROOT_USER: forma-local
-      MINIO_ROOT_PASSWORD: ${FORMA_S3_SECRET:-forma-local-development}
-    volumes: [assets:/data]
-    healthcheck:
-      test: [CMD, curl, -f, http://localhost:9000/minio/health/live]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-    restart: unless-stopped
   migrate:
     <<: *api
     restart: 'no'
     depends_on:
       postgres: {condition: service_healthy}
-      minio: {condition: service_healthy}
     command: [sh, -c, 'alembic upgrade head && python -m forma.init_storage']
   api:
     <<: *api
@@ -94,4 +79,4 @@ services:
 volumes:
   postgres:
   redis:
-  assets:
+  files:
